@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulir Pendaftaran Pengguna</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h2 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: #2200ff;
+      outline: none;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9em;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+
+    .valid {
+      color: #2200ff;
+      font-size: 0.9em;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 100%;
+      background-color: #2200ff;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2200ff;
+    }
+
+    @media (max-width: 600px) {
+      form {
+        padding: 15px;
+      }
+      h2 {
+        font-size: 1.5em;
+      }
+      input {
+        font-size: 14px;
+      }
+      button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2></h2>
+  <form id="registrationForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <span id="usernameFeedback" class="error"></span><br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <span id="emailFeedback" class="error"></span><br><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <span id="passwordFeedback" class="error"></span><br><br>
+
+    <label for="confirmPassword">Konfirmasi Password:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" required>
+    <span id="confirmPasswordFeedback" class="error"></span><br><br>
+
+    <button type="submit">Daftar</button>
+  </form>
+
+  <script>
+    // Fungsi validasi username
+    const username = document.getElementById("username");
+    const usernameFeedback = document.getElementById("usernameFeedback");
+    username.addEventListener("keyup", function() {
+      const usernameValue = username.value;
+      const usernameRegex = /^[a-zA-Z0-9]{5,20}$/;
+      if (usernameRegex.test(usernameValue)) {
+        usernameFeedback.textContent = "Username valid.";
+        usernameFeedback.className = "valid";
+      } else {
+        usernameFeedback.textContent = "Username harus 5-20 karakter alfanumerik.";
+        usernameFeedback.className = "error";
+      }
+    });
+
+    // Fungsi validasi email
+    const email = document.getElementById("email");
+    const emailFeedback = document.getElementById("emailFeedback");
+    email.addEventListener("change", function() {
+      const emailValue = email.value;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailRegex.test(emailValue)) {
+        emailFeedback.textContent = "Email valid.";
+        emailFeedback.className = "valid";
+      } else {
+        emailFeedback.textContent = "Format email tidak valid.";
+        emailFeedback.className = "error";
+      }
+    });
+
+    // Fungsi validasi kekuatan password
+    const password = document.getElementById("password");
+    const passwordFeedback = document.getElementById("passwordFeedback");
+    password.addEventListener("keyup", function() {
+      const passwordValue = password.value;
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      if (passwordRegex.test(passwordValue)) {
+        passwordFeedback.textContent = "Password kuat.";
+        passwordFeedback.className = "valid";
+      } else {
+        passwordFeedback.textContent = "Password harus minimal 8 karakter dan mencakup angka dan huruf.";
+        passwordFeedback.className = "error";
+      }
+    });
+
+    // Fungsi validasi konfirmasi password
+    const confirmPassword = document.getElementById("confirmPassword");
+    const confirmPasswordFeedback = document.getElementById("confirmPasswordFeedback");
+    confirmPassword.addEventListener("input", function() {
+      if (confirmPassword.value === password.value) {
+        confirmPasswordFeedback.textContent = "Password cocok.";
+        confirmPasswordFeedback.className = "valid";
+      } else {
+        confirmPasswordFeedback.textContent = "Password tidak cocok.";
+        confirmPasswordFeedback.className = "error";
+      }
+    });
+
+    // Validasi akhir saat submit
+    const form = document.getElementById("registrationForm");
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Periksa semua kondisi validasi
+      const isUsernameValid = /^[a-zA-Z0-9]{5,20}$/.test(username.value);
+      const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
+      const isPasswordValid = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password.value);
+      const isConfirmPasswordValid = (confirmPassword.value === password.value);
+
+      if (isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid) {
+        alert("Pendaftaran berhasil!");
+        form.reset();
+        usernameFeedback.textContent = "";
+        emailFeedback.textContent = "";
+        passwordFeedback.textContent = "";
+        confirmPasswordFeedback.textContent = "";
+      } else {
+        alert("Periksa kembali formulir Anda.");
+      }
+    });
+  </script>
+</body>
+</html>
